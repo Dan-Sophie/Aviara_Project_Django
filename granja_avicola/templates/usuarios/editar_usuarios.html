@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="p-5" style="background-color: #f4f7f6; min-height: 100vh;">
+    <div class="container">
+        <header class="mb-5 d-flex justify-content-between align-items-center">
+            <div>
+                <h1 class="fw-bold" style="color: #630E20; font-size: 4.5rem; letter-spacing: -3px; line-height: 0.8; margin-bottom: 5px;">
+                    Editar
+                </h1>
+                <p class="text-muted fw-bold" style="font-size: 0.9rem; letter-spacing: 5px; text-transform: uppercase; opacity: 0.5; margin: 0;">
+                    Perfil de {{ usuario.username }}
+                </p>
+            </div>
+            
+            <div class="d-flex gap-2 align-items-center">
+                <a href="{% url 'lista_usuarios' %}" class="btn btn-white px-3 shadow-sm d-flex align-items-center" 
+                   style="border-radius: 12px; border: 1px solid #e0e0e0; background: white; color: #630E20; font-weight: 600; height: 45px; transition: 0.3s;"
+                   onmouseover="this.style.backgroundColor='#f8f9fa'; this.style.transform='translateY(-2px)';"
+                   onmouseout="this.style.backgroundColor='white'; this.style.transform='translateY(0)';"
+                   >
+                    <i class="bi bi-arrow-left-circle-fill me-2" style="font-size: 0.9rem;"></i> Volver a Lista
+                </a>
+            </div>
+        </header>
+
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="card border-0 shadow-lg" style="border-radius: 30px; overflow: hidden;">
+                    <div class="card-body p-5">
+                        <form method="POST">
+                            {% csrf_token %}
+                            <div class="row g-4">
+                                {% for field in form %}
+                                    {% if field.name == 'is_staff' or field.name == 'is_active' %}
+                                    <div class="col-md-6">
+                                        <div class="p-3 d-flex align-items-center justify-content-between" 
+                                             style="background-color: #f8f9fa; border-radius: 15px; border: 1px solid #eee;">
+                                            <div>
+                                                <label class="fw-bold small text-uppercase d-block" style="color: #630E20; margin-bottom: 0;">
+                                                    {{ field.label }}
+                                                </label>
+                                                <small class="text-muted">Estado del sistema</small>
+                                            </div>
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" name="{{ field.name }}" 
+                                                       id="{{ field.id_for_label }}" {% if field.value %}checked{% endif %}
+                                                       style="width: 40px; height: 20px; cursor: pointer;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% else %}
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold small text-uppercase" style="color: #630E20; opacity: 0.8;">
+                                            {{ field.label }}
+                                        </label>
+                                        {{ field }}
+                                        {% if field.errors %}
+                                            <div class="text-danger small mt-1">{{ field.errors }}</div>
+                                        {% endif %}
+                                    </div>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+
+                            <div class="mt-5 d-flex gap-3">
+                                <button type="submit" class="btn text-white px-5 py-3 shadow-sm" 
+                                        style="background-color: #630E20; border-radius: 15px; font-weight: 600; transition: 0.3s;"
+                                        onmouseover="this.style.opacity='0.9'; this.style.transform='translateY(-2px)';"
+                                        onmouseout="this.style.opacity='1'; this.style.transform='translateY(0)';"
+                                        >
+                                    Guardar Cambios
+                                </button>
+                                <a href="{% url 'lista_usuarios' %}" class="btn btn-light px-5 py-3" 
+                                   style="border-radius: 15px; font-weight: 600; border: 1px solid #ddd;">
+                                    Cancelar
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4">
+                <div class="card border-0 shadow-sm text-white text-center p-4" 
+                     style="background: linear-gradient(135deg, #630E20 0%, #4a0a18 100%); border-radius: 30px;">
+                    <div class="rounded-circle bg-white d-inline-flex align-items-center justify-content-center mx-auto mb-3 shadow" 
+                         style="width: 80px; height: 80px; color: #630E20; font-size: 2rem; font-weight: bold;">
+                        {{ usuario.username|first|upper }}
+                    </div>
+                    <h4 class="fw-bold mb-1">{{ usuario.username }}</h4>
+                    <span class="badge {% if usuario.is_active %}bg-success{% else %}bg-danger{% endif %} rounded-pill mb-4">
+                        {% if usuario.is_active %}Activo{% else %}Inactivo{% endif %}
+                    </span>
+                    
+                    <div class="py-3"> <hr class="opacity-25 my-4">
+                    </div>
+
+                    <div class="px-2">
+                        <p class="small text-uppercase fw-bold opacity-50 mb-2">Auditoría Aviara</p>
+                        <p class="small italic" style="line-height: 1.6;">
+                            "Modificar el estado de un usuario afectará su capacidad de inicio de sesión de inmediato."
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Estilo consistente con el Registro de Aviara */
+    input[type="text"], input[type="email"], input[type="password"], select {
+        display: block;
+        width: 100%;
+        padding: 12px 16px;
+        font-size: 1rem;
+        border-radius: 12px;
+        border: 1px solid #e0e0e0;
+        background-color: #ffffff;
+        transition: all 0.3s ease;
+    }
+    input:focus {
+        border-color: #630E20;
+        box-shadow: 0 0 0 4px rgba(99, 14, 32, 0.1);
+        outline: none;
+    }
+    .form-check-input:checked {
+        background-color: #630E20;
+        border-color: #630E20;
+    }
+</style>
+{% endblock %}

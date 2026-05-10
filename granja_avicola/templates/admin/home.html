@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="d-flex" style="min-height: 100vh; background-color: #f4f7f6;">
+    
+    <nav class="sidebar shadow-sm" style="width: 280px; background-color: #ffffff; min-height: 100vh;">
+        <div class="p-4 text-center border-bottom">
+            <h4 class="fw-bold" style="color: #630E20; letter-spacing: -1px;">Aviara Panel</h4>
+            <span class="badge rounded-pill" style="background-color: #630E20; font-size: 0.7rem;">ADMINISTRADOR</span>
+        </div>
+        
+        <div class="list-group list-group-flush p-3">
+            <a href="{% url 'lista_usuarios' %}" class="list-group-item list-group-item-action border-0 py-3 mb-1" style="border-radius: 12px; font-weight: 600; color: #444;">
+                <span class="me-2"></span> Usuarios
+            </a>
+            <a href="#" class="list-group-item list-group-item-action border-0 py-3 mb-1" style="border-radius: 12px; font-weight: 600; color: #444;">
+                <span class="me-2">📖</span> Catálogo
+            </a>
+            <a href="#" class="list-group-item list-group-item-action border-0 py-3 mb-1" style="border-radius: 12px; font-weight: 600; color: #444;">
+                <span class="me-2">🥚</span> Producción
+            </a>
+            <a href="#" class="list-group-item list-group-item-action border-0 py-3 mb-1" style="border-radius: 12px; font-weight: 600; color: #444;">
+                <span class="me-2">📉</span> Merma
+            </a>
+            <a href="#" class="list-group-item list-group-item-action border-0 py-3 mb-1" style="border-radius: 12px; font-weight: 600; color: #444;">
+                <span class="me-2">📦</span> Inventario
+            </a>
+            <a href="#" class="list-group-item list-group-item-action border-0 py-3 mb-1" style="border-radius: 12px; font-weight: 600; color: #444;">
+                <span class="me-2">🛒</span> Pedidos
+            </a>
+            <a href="#" class="list-group-item list-group-item-action border-0 py-3 mb-1" style="border-radius: 12px; font-weight: 600; color: #444;">
+                <span class="me-2">🚚</span> Distribuidor
+            </a>
+        </div>
+    </nav>
+
+    <main class="flex-grow-1 p-5">
+        <header class="mb-5">
+            <h1 class="fw-bold" style="color: #630E20; font-size: 3.5rem; letter-spacing: -2.5px; line-height: 0.9; margin-bottom: 5px;">
+                Panel de Control
+            </h1>
+            <p class="text-muted" style="font-size: 1.1rem; font-weight: 400; opacity: 0.8;">
+                Gestiona todos los módulos de la granja Aviara.
+            </p>
+        </header>
+
+        <div class="alert alert-light border-0 shadow-sm p-4" style="border-radius: 20px;">
+            <h4 class="fw-bold">Bienvenido, {{ user.username }}</h4>
+            <p class="mb-0">Desde aquí puedes supervisar la producción y ventas.</p>
+        </div>
+    </main>
+</div>
+{% endblock %}

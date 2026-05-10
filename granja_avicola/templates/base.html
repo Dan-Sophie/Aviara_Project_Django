@@ -1,29 +1,112 @@
+{% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Aviara - Gestion de Granja{% endblock %}</title>
+    <title>{% block title %}Aviara{% endblock %}</title>
+
+    <!-- Google Fonts: Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Frameworks -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        vinotinto: '#630E20',
+                        naranja: '#F57C00',
+                        beige: '#F5F5DC',
+                        oscuro: '#1A1A1A',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { font-family: 'Poppins', sans-serif; background-color: #F5F5DC; }
+        .bg-vinotinto { background-color: #630E20; }
+        .text-vinotinto { color: #630E20; }
+        .btn-vinotinto { background-color: #630E20 !important; color: white !important; border: none; }
+        .btn-vinotinto:hover { background-color: #4a0a18 !important; }
+    </style>
+    {% block extra_css %}{% endblock %}
 </head>
-<body class="bg-gray-100">
-    <nav class="bg-green-700 text-white shadow-lg p-4">
-        <div class="container mx-auto flex justify-between items-center">
-            <h1 class="text-2xl font-bold">Aviara</h1>
-            <ul class="flex space-x-6">
-                <li><a href="{% url 'home' %}" class="hover:text-green-200">Inicio</a></li>
-            </ul>
+<body class="min-h-screen flex flex-col">
+
+    <!-- NAVBAR UNIVERSAL -->
+    <nav class="bg-white border-b border-gray-200 shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <a href="/" class="flex-shrink-0 flex items-center">
+                        <span class="text-2xl font-bold tracking-tighter text-vinotinto">AVIARA</span>
+                    </a>
+                </div>
+
+                <!-- Usuario y Acciones -->
+                <div class="flex items-center gap-4">
+                    {% if user.is_authenticated %}
+                        <div class="hidden md:block text-right">
+                            <p class="text-sm font-semibold text-gray-800 leading-none">
+                                {{ user.first_name|default:user.username }} {{ user.last_name|default:"" }}
+                            </p>
+                            <span class="text-[10px] text-naranja font-bold uppercase">En línea</span>
+                        </div>
+                        <div class="dropdown">
+                            <button class="flex items-center focus:outline-none" type="button" data-bs-toggle="dropdown">
+                                <div class="w-10 h-10 rounded-full bg-vinotinto flex items-center justify-center text-white font-bold border-2 border-naranja">
+                                    {{ user.username|slice:":1"|upper }}
+                                </div>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 mt-2">
+                                <li><a class="dropdown-item py-2" href="#">Mi Perfil</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <form action="{% url 'logout' %}" method="post">
+                                        {% csrf_token %}
+                                        <button type="submit" class="dropdown-item text-danger">Cerrar Sesión</button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </div>
+                    {% else %}
+                        <a href="{% url 'login' %}" class="btn btn-vinotinto btn-sm rounded-pill px-4">Ingresar</a>
+                    {% endif %}
+                </div>
+            </div>
         </div>
     </nav>
 
-    <main class="container mx-auto mt-10 p-4">
-        {% block content %}
+    <!-- CONTENIDO BASE -->
+    <main class="flex-grow">
+        {% block main_container %}
+            <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+                {% block content %}{% endblock %}
+            </div>
         {% endblock %}
     </main>
-    <footer class="text-center p-6 text-gray-500">
-        &copy; 2026 Aviara - Software de Gestión Avícola y Agrícola.
-    </footer>
+
+    <!-- SCRIPTS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        {% if messages %}
+            {% for message in messages %}
+                Swal.fire({
+                    title: 'Notificación',
+                    text: "{{ message }}",
+                    icon: "{{ message.tags }}",
+                    confirmButtonColor: '#630E20'
+                });
+            {% endfor %}
+        {% endif %}
+    </script>
+    {% block extra_js %}{% endblock %}
 </body>
 </html>

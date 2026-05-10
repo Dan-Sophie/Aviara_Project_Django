@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container text-center py-5">
+    <h1 class="fw-bold" style="color: #630E20; font-size: 3rem;">Bienvenido a Aviara</h1>
+    <p class="lead text-muted">La mejor gestión para tu granja avícola.</p>
+    <div class="mt-4">
+        <a href="{% url 'login' %}" class="btn btn-lg px-5 text-white" style="background-color: #630E20; border-radius: 10px;">Ingresar al Sistema</a>
+    </div>
+</div>
+{% endblock %}

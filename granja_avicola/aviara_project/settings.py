@@ -44,15 +44,10 @@ INSTALLED_APPS = [
     'productos',
     'usuarios',
     'ventas',
+    'crispy_forms',
+    'crispy_bootstrap5',
+    'import_export',
 ]
-AUTH_USER_MODEL = 'usuarios.Usuario'
-
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'vhuertasortiz@gmail.com'  # Tu cuenta de Gmail
-EMAIL_HOST_PASSWORD = 'hggs llcl gcjb llun'
 
 
 MIDDLEWARE = [
@@ -136,6 +131,17 @@ AUTH_USER_MODEL = 'usuarios.Usuario'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-LOGIN_REDIRECT_URL = 'home'
-LOGOUT_REDIRECT_URL = 'login'
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'admin_dashboard'
+LOGOUT_REDIRECT_URL = 'landing'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'vhuertasortiz@gmail.com'  # Tu cuenta de Gmail
+EMAIL_HOST_PASSWORD = 'hggs llcl gcjb llun'
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_TEMPLATE_PACKS = "bootstrap5"
 
