@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 90vh;">
+    <div class="col-md-5 col-lg-4">
+        <div class="card border-0 shadow-lg p-4" style="border-radius: 20px; background-color: #ffffff;">
+            <div class="card-body">
+                <h3 class="text-center fw-bold mb-4" style="color: #030303; letter-spacing: -1px;">Crear Cuenta</h3>
+                
+                <form method="POST">
+                    {% csrf_token %}
+                    
+                    {% for field in form %}
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold" style="color: #080808;">
+                            {% if field.name == 'username' %} 
+                                Nombre Completo 👤
+                            {% elif field.name == 'documento' %}
+                                Documento 🪪
+                            {% elif field.name == 'email' %}
+                                Correo Electrónico 📧
+                            {% elif field.name == 'password1' %}
+                                Contraseña 🔐
+                            {% elif field.name == 'password2' %}
+                                Confirmar Contraseña 🔓
+                            {% else %}
+                                {{ field.label }}
+                            {% endif %}
+                        </label>
+
+                        <input type="{{ field.field.widget.input_type }}" 
+                               name="{{ field.name }}" 
+                               class="form-control" 
+                               style="background-color: #f8f9fa; border-radius: 10px; border: 1px solid #eee;"
+                               placeholder="Ingrese su {% if field.name == 'username' %}nombre{% elif field.name == 'email' %}correo{% elif field.name == 'documento' %}documento{% else %}clave{% endif %}"
+                               required>
+
+                        {% if field.help_text %}
+                            <div class="form-text small" style="font-size: 0.75rem;">{{ field.help_text }}</div>
+                        {% endif %}
+
+                        {% if field.errors %}
+                            {% for error in field.errors %}
+                                <div class="text-danger small fw-bold mt-1" style="font-size: 0.75rem;">{{ error }}</div>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+
+                    <button type="submit" class="btn w-100 py-2 mt-3" 
+                            style="background-color: #157347; color: white; border-radius: 10px; border: none; font-weight: bold;">
+                        Registrarse
+                    </button>
+                   
+                </form>
+
+                <div class="text-center mt-4">
+                    <p class="small text-muted">¿Ya tienes cuenta? 
+                        <a href="{% url 'login' %}" class="text-decoration-none fw-bold" style="color: #030303;">Inicia sesión aquí</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

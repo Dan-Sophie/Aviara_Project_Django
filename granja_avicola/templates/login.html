@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+    <div class="col-md-5 col-lg-4">
+        <div class="card border-0 shadow-lg p-4" style="border-radius: 15px;">
+            <div class="card-body">
+                <h3 class="text-center fw-bold mb-4" style="color: #020202;">Iniciar sesión✅</h3>
+
+                <form method="POST">
+                    {% csrf_token %}
+
+                    {% if form.errors %}
+                    <div class="mb-4 p-3" style="border-left: 5px solid #080808; background-color: #f5f3f3; border-radius: 8px;">
+                        <p style="color: #0a0a0a; font-size: 0.85rem; margin: 0; font-weight: bold;">
+                             La contraseña es incorrecta. Por favor, inténtalo de nuevo.
+                        </p>
+                    </div>
+                    {% endif %}
+
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold" style="color: #020202;">Usuario 👤</label>
+                        <input type="text" name="username" class="form-control" required>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label small fw-bold" style="color: #020202;">Contraseña 🔐</label>
+                        <input type="password" name="password" class="form-control" required>
+                    </div>
+
+                    <button type="submit" class="btn w-100 py-2" style="background-color: #157347; color: white; font-weight: bold; border-radius: 8px;">
+                        Ingresar
+                    </button>
+                </form>
+                     
+                
+                <hr class="my-4">
+                <div class="text-center">
+                    <div class="text-center mt-3">
+                        <a href="{% url 'password_reset' %}" class="text-sm text-black hover:text-gray-700 hover:underline">¿Olvidaste tu contraseña?
+                        </a>
+                    <p class="small" style="color:#888;">¿Eres nuevo? <a href="{% url 'registro' %}" class="fw-bold" style="color: #000000; text-decoration: none;">👉Regístrate aquí. </a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
