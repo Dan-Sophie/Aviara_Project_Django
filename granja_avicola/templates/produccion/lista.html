@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="p-4" style="background-color: #f4f7f6; min-height: 100vh;">
+    <header class="mb-4 d-flex justify-content-between align-items-center">
+        <div>
+            <h1 class="fw-bold" style="color: #3D5229; font-size: 3.5rem; letter-spacing: -2px; line-height: 0.8; margin-bottom: 5px;">
+                Producción
+            </h1>
+            <p class="text-muted fw-bold" style="font-size: 0.8rem; letter-spacing: 4px; text-transform: uppercase; opacity: 0.5; margin: 0;">
+                Control Operativo y Trazabilidad
+            </p>
+        </div>
+        
+        <div class="d-flex gap-2 align-items-center">
+            <a href="{% url 'home' %}" class="btn btn-white px-3 shadow-sm d-flex align-items-center" 
+               style="border-radius: 10px; border: 1px solid #e0e0e0; background: white; color: #3D5229; font-weight: 600; height: 40px;">
+                <i class="bi bi-grid-1x2-fill me-2"></i> Dashboard
+            </a>
+
+            <a href="{% url 'lista_lotes' %}" class="btn px-3 shadow-sm text-white d-flex align-items-center" 
+               style="border-radius: 10px; background-color: #F39C12; border: none; font-weight: 600; height: 40px;">
+                <i class="bi bi-box-seam me-2"></i> Ver Lotes
+            </a>
+            
+            <a href="{% url 'registrar_produccion' %}" class="btn text-white px-3 shadow-sm d-flex align-items-center" 
+               style="background-color: #3D5229; border-radius: 10px; font-weight: 600; height: 40px;">
+                <i class="bi bi-plus-lg me-2"></i> Registrar Día
+            </a>
+        </div>
+    </header>
+
+    <div class="card border-0 shadow-sm" style="border-radius: 20px; overflow: hidden;">
+        <div class="card-header bg-white border-0 p-3 px-4">
+            <h5 class="mb-0 fw-bold" style="color: #3D5229; font-size: 1rem;">
+                <i class="bi bi-list-check me-2"></i>Historial de Producción Detallado
+            </h5>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0" style="min-width: 1100px;">
+                    <thead style="background-color: #f8f9fa;">
+                        <tr class="text-uppercase small fw-bold text-muted" style="font-size: 0.75rem;">
+                            <th class="p-3 border-0 px-4">Fecha / ID</th>
+                            <th class="p-3 border-0">Lote</th>
+                            <th class="p-3 border-0">Responsable</th>
+                            <th class="p-3 border-0 text-center">Mortalidad</th>
+                            <th class="p-3 border-0 text-center">Producción</th>
+                            <th class="p-3 border-0 text-center">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody style="font-size: 0.9rem;">
+                        {% for p in producciones %}
+                        <tr>
+                            <td class="p-3 align-middle px-4">
+                                <span class="fw-bold d-block text-dark">{{ p.fecha_produccion|date:"d M, Y" }}</span>
+                                <small class="text-muted italic">Reg: #{{ p.id }}</small>
+                            </td>
+                            <td class="p-3 align-middle">
+                                <span class="badge" style="background-color: rgba(61, 82, 41, 0.1); color: #3D5229; border: 1px solid rgba(61, 82, 41, 0.2);">
+                                    <i class="bi bi-tag-fill me-1"></i>{{ p.lote.codigo_lote }}
+                                </span>
+                            </td>
+                            <td class="p-3 align-middle">
+                                <div class="d-flex align-items-center">
+                                    <div class="rounded-circle me-2 d-flex align-items-center justify-content-center shadow-sm" 
+                                         style="width: 32px; height: 32px; background-color: #630E20; color: white; font-size: 0.7rem; font-weight: bold;">
+                                        {{ p.usuario.username|first|upper }}
+                                    </div>
+                                    <div>
+                                        <span class="d-block fw-bold text-dark" style="font-size: 0.85rem;">{{ p.usuario.get_full_name|default:p.usuario.username }}</span>
+                                        <small class="text-muted" style="font-size: 0.7rem;">Operador</small>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="p-3 align-middle text-center">
+                                <div class="d-inline-flex align-items-center justify-content-center px-3 py-1 rounded-pill" 
+                                     style="background-color: #fff5f5; border: 1px solid #feb2b2;">
+                                    <span class="text-danger fw-bold" style="font-size: 1rem;">{{ p.mortalidad_del_dia|default:"0" }}</span>
+                                    <i class="bi bi-graph-down text-danger ms-2" style="font-size: 0.8rem;"></i>
+                                </div>
+                            </td>
+                            <td class="p-3 align-middle text-center">
+                                <span class="fw-black" style="color: #3D5229; font-size: 1.2rem; font-weight: 900;">
+                                    {{ p.cantidad_recolectada }}
+                                </span>
+                                <small class="text-muted fw-bold">UND</small>
+                            </td>
+                            <td class="p-3 align-middle text-center">
+                                <div class="btn-group shadow-sm" style="border-radius: 8px; overflow: hidden;">
+                                    <a href="{% url 'editar_produccion' p.id %}" class="btn btn-white btn-sm px-3" 
+                                       style="color: #3D5229; background: white; border-right: 1px solid #eee; font-weight: 600;">
+                                        <i class="bi bi-pencil-square"></i> Editar
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr><td colspan="6" class="p-5 text-center text-muted">No hay registros de producción disponibles.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .fw-black { font-weight: 900; }
+    .table-hover tbody tr:hover {
+        background-color: rgba(61, 82, 41, 0.02) !important;
+    }
+</style>
+{% endblock %}

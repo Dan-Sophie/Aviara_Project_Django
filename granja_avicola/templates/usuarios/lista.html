@@ -1,96 +1,104 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="p-5" style="background-color: #f4f7f6; min-height: 100vh;">
-    <header class="mb-5 d-flex justify-content-between align-items-center">
+<div class="p-4" style="background-color: #f4f7f6; min-height: 100vh;">
+    <header class="mb-4 d-flex justify-content-between align-items-center">
         <div>
-            <h1 class="fw-bold" style="color: #630E20; font-size: 4.5rem; letter-spacing: -3px; line-height: 0.8; margin-bottom: 5px;">
+            <h1 class="fw-bold" style="color: #630E20; font-size: 3.5rem; letter-spacing: -2px; line-height: 0.8; margin-bottom: 5px;">
                 Usuarios
             </h1>
-            <p class="text-muted fw-bold" style="font-size: 0.9rem; letter-spacing: 5px; text-transform: uppercase; opacity: 0.5; margin: 0;">
+            <p class="text-muted fw-bold" style="font-size: 0.8rem; letter-spacing: 4px; text-transform: uppercase; opacity: 0.5; margin: 0;">
                 Control de Acceso Aviara
             </p>
         </div>
         
         <div class="d-flex gap-2 align-items-center">
             <a href="{% url 'home' %}" class="btn btn-white px-3 shadow-sm d-flex align-items-center" 
-               style="border-radius: 12px; border: 1px solid #e0e0e0; background: white; color: #630E20; font-weight: 600; height: 45px; transition: 0.3s;"
-               onmouseover="this.style.backgroundColor='#f8f9fa'; this.style.transform='translateY(-2px)';"
-               onmouseout="this.style.backgroundColor='white'; this.style.transform='translateY(0)';"
-               >
-                <i class="bi bi-grid-1x2-fill me-2" style="font-size: 0.9rem;"></i> Dashboard
+               style="border-radius: 10px; border: 1px solid #e0e0e0; background: white; color: #630E20; font-weight: 600; height: 40px;">
+                <i class="bi bi-grid-1x2-fill me-2"></i> Dashboard
             </a>
 
-            <button type="button" class="btn px-4 shadow-sm text-white d-flex align-items-center" 
-                    style="border-radius: 12px; background-color: #F39C12; border: none; font-weight: 600; height: 45px; transition: 0.3s;"
-                    onmouseover="this.style.backgroundColor='#E67E22'; this.style.transform='translateY(-2px)';" 
-                    onmouseout="this.style.backgroundColor='#F39C12'; this.style.transform='translateY(0)';"
+            <button type="button" class="btn px-3 shadow-sm text-white d-flex align-items-center" 
+                    style="border-radius: 10px; background-color: #F39C12; border: none; font-weight: 600; height: 40px;"
                     data-bs-toggle="modal" data-bs-target="#modalCargaMasiva">
                 <i class="bi bi-file-earmark-excel me-2"></i> Carga Masiva
             </button>
             
-            <a href="{% url 'registro' %}" class="btn text-white px-4 shadow-sm d-flex align-items-center" 
-               style="background-color: #630E20; border-radius: 12px; font-weight: 600; height: 45px; transition: 0.3s;"
-               onmouseover="this.style.transform='translateY(-2px)';"
-               onmouseout="this.style.transform='translateY(0)';"
-               >
-                <i class="bi bi-person-plus-fill me-2"></i> Nuevo Usuario
+            <a href="{% url 'crear_usuario' %}" class="btn text-white px-3 shadow-sm d-flex align-items-center" 
+               style="background-color: #630E20; border-radius: 10px; font-weight: 600; height: 40px;">
+                <i class="bi bi-person-plus-fill me-2"></i> Nuevo
             </a>
         </div>
     </header>
 
-    <div class="card border-0 shadow-sm" style="border-radius: 25px; overflow: hidden;">
+    <div class="card border-0 shadow-sm" style="border-radius: 20px; overflow: hidden;">
         <div class="card-body p-0">
-            <table class="table table-hover mb-0">
-                <thead style="background-color: #f8f9fa;">
-                    <tr>
-                        <th class="p-4 border-0 text-muted small uppercase">Usuario</th>
-                        <th class="p-4 border-0 text-muted small uppercase">Email</th>
-                        <th class="p-4 border-0 text-muted small uppercase text-center">Estado</th>
-                        <th class="p-4 border-0 text-muted small uppercase text-end">Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for u in usuarios %}
-                    <tr>
-                        <td class="p-4 align-middle">
-                            <div class="d-flex align-items-center">
-                                <div class="rounded-circle d-flex align-items-center justify-content-center me-3 shadow-sm" 
-                                     style="width: 45px; height: 45px; background-color: #630E20; color: white; font-weight: bold; font-size: 1.2rem;">
-                                    {{ u.username|first|upper }}
+            <div class="table-responsive">
+                <table class="table table-hover mb-0" style="min-width: 1100px;">
+                    <thead style="background-color: #f8f9fa;">
+                        <tr class="text-uppercase small fw-bold text-muted" style="font-size: 0.75rem;">
+                            <th class="p-3 border-0">Usuario</th>
+                            <th class="p-3 border-0">Identificación</th>
+                            <th class="p-3 border-0">Contacto</th>
+                            <th class="p-3 border-0 text-center">Rol / Cargo</th>
+                            <th class="p-3 border-0 text-center">Estado</th>
+                            <th class="p-3 border-0 text-center">Acciones</th> </tr>
+                    </thead>
+                    <tbody style="font-size: 0.9rem;">
+                        {% for u in usuarios %}
+                        <tr>
+                            <td class="p-3 align-middle">
+                                <div class="d-flex align-items-center">
+                                    <div class="rounded-circle d-flex align-items-center justify-content-center me-3 shadow-sm" 
+                                         style="width: 40px; height: 40px; min-width: 40px; min-height: 40px; background-color: #630E20; color: white; font-weight: bold; flex-shrink: 0;">
+                                        {{ u.username|first|upper }}
+                                    </div>
+                                    <div>
+                                        <span class="fw-bold d-block text-dark">{{ u.get_full_name|default:u.username }}</span>
+                                        <small class="text-muted">@{{ u.username }}</small>
+                                    </div>
                                 </div>
-                                <div>
-                                    <span class="fw-bold d-block" style="color: #333;">{{ u.username }}</span>
-                                    <small class="text-muted">Miembro desde: {{ u.date_joined|date:"M Y" }}</small>
+                            </td>
+                            <td class="p-3 align-middle">
+                                <span class="badge bg-light text-dark border-0 fw-normal" style="font-size: 0.8rem;">
+                                    {{ u.tipo_documento }}: {{ u.documento }}
+                                </span>
+                            </td>
+                            <td class="p-3 align-middle">
+                                <div style="font-size: 0.85rem;">
+                                    <div class="text-dark"><i class="bi bi-envelope-at me-1 opacity-50"></i>{{ u.email }}</div>
+                                    <div class="text-muted"><i class="bi bi-telephone me-1 opacity-50"></i>{{ u.telefono|default:"---" }}</div>
                                 </div>
-                            </div>
-                        </td>
-                        <td class="p-4 align-middle text-muted">{{ u.email }}</td>
-                        <td class="p-4 align-middle text-center">
-                            {% if u.is_staff %}
-                                <span class="badge rounded-pill px-3 py-2" style="background-color: #630E20; font-size: 0.7rem;">ADMINISTRADOR</span>
-                            {% else %}
-                                <span class="badge rounded-pill px-3 py-2 bg-light text-dark border" style="font-size: 0.7rem;">CLIENTE</span>
-                            {% endif %}
-                        </td>
-                        <td class="p-4 align-middle text-end">
-                            <div class="btn-group shadow-sm" style="border-radius: 10px; overflow: hidden;">
-                                <a href="{% url 'editar_usuario' u.id %}" class="btn btn-white btn-sm px-3 border-end" style="color: #630E20; font-weight: 600; background: white;">
-                                    <i class="bi bi-pencil-square me-1"></i> Editar
-                                </a>
-                                <button class="btn btn-white btn-sm px-3 text-danger" style="font-weight: 600; background: white;">
-                                    <i class="bi bi-trash3 me-1"></i> Eliminar
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                    {% empty %}
-                    <tr>
-                        <td colspan="4" class="p-5 text-center text-muted italic">No hay usuarios registrados en el sistema.</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+                            </td>
+                            <td class="p-3 align-middle text-center">
+                                <span class="badge rounded-pill px-3 py-2" 
+                                      style="background-color: rgba(99, 14, 32, 0.08); color: #630E20; border: 1px solid rgba(99, 14, 32, 0.1); font-size: 0.7rem;">
+                                    {{ u.rol|upper|default:"SIN ROL" }}
+                                </span>
+                            </td>
+                            <td class="p-3 align-middle text-center">
+                                {% if u.is_active %}
+                                    <span class="badge bg-success-subtle text-success border-0 px-2" style="font-size: 0.75rem;">Activo</span>
+                                {% else %}
+                                    <span class="badge bg-danger-subtle text-danger border-0 px-2" style="font-size: 0.75rem;">Inactivo</span>
+                                {% endif %}
+                            </td>
+                            <td class="p-3 align-middle text-center"> <div class="btn-group shadow-sm" style="border-radius: 8px; overflow: hidden;">
+                                    <a href="{% url 'editar_usuario' u.id %}" class="btn btn-white btn-sm px-3" style="color: #630E20; background: white; border-right: 1px solid #eee; font-weight: 600;">
+                                        <i class="bi bi-pencil-square me-1"></i> Editar
+                                    </a>
+                                    <a href="{% url 'eliminar_usuario' u.pk %}" class="btn btn-white btn-sm px-3 text-danger" style="background: white; font-weight: 600;" onclick="return confirm('¿Eliminar a {{ u.username }}?');">
+                                        <i class="bi bi-trash3 me-1"></i> Eliminar
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr><td colspan="6" class="p-5 text-center text-muted">No hay usuarios registrados.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
@@ -110,8 +118,7 @@
                     <p class="text-muted small mb-4">Sube tu archivo .xlsx siguiendo el formato oficial de la granja.</p>
                     <div class="mb-3">
                         <label class="form-label fw-bold small text-uppercase" style="color: #630E20; opacity: 0.7;">Archivo Excel</label>
-                        <input type="file" name="archivo_excel" class="form-control shadow-sm" accept=".xlsx" required 
-                               style="border-radius: 10px; border: 1px solid #eee; padding: 10px;">
+                        <input type="file" name="archivo_excel" class="form-control" accept=".xlsx" required style="border-radius: 10px;">
                     </div>
                 </div>
                 <div class="modal-footer border-0 p-4 pt-0">

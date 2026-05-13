@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="max-w-2xl mx-auto bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100">
+    <div class="bg-[#3D5229] p-6 text-white">
+        <h2 class="text-2xl font-bold italic">
+            {% if produccion %} Editar Producción Lote {{ produccion.lote.codigo_lote }} {% else %} Registrar Recolección Diaria {% endif %}
+        </h2>
+    </div>
+    <form method="POST" class="p-8 space-y-6">
+        {% csrf_token %}
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+                <label class="block text-xs font-bold text-gray-400 uppercase mb-2">Producto</label>
+                <select name="producto" class="w-full p-3 bg-stone-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-[#3D5229]" {% if produccion %}disabled{% endif %} required>
+                    {% for prod in productos %}
+                    <option value="{{ prod.id }}" {% if produccion.producto.id == prod.id %}selected{% endif %}>{{ prod.nombre }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div>
+                <label class="block text-xs font-bold text-gray-400 uppercase mb-2">Cantidad (Unidades)</label>
+                <input type="number" name="cantidad" value="{{ produccion.cantidad_recolectada|default:'' }}" class="w-full p-3 bg-stone-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-[#3D5229]" required>
+            </div>
+            <div>
+                <label class="block text-xs font-bold text-gray-400 uppercase mb-2">Código de Lote</label>
+                <input type="text" name="lote" value="{{ produccion.lote.codigo_lote|default:'' }}" class="w-full p-3 bg-stone-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-[#3D5229]" required>
+            </div>
+            <div>
+                <label class="block text-xs font-bold text-gray-400 uppercase mb-2">Fecha Producción</label>
+                <input type="date" name="fecha_produccion" value="{{ produccion.fecha_produccion|date:'Y-m-d' }}" class="w-full p-3 bg-stone-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-[#3D5229]" required>
+            </div>
+        </div>
+        <div>
+            <label class="block text-xs font-bold text-gray-400 uppercase mb-2">Observaciones</label>
+            <textarea name="observaciones" rows="3" class="w-full p-3 bg-stone-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-[#3D5229]">{{ produccion.observaciones|default:'' }}</textarea>
+        </div>
+        <div class="flex gap-4 pt-4">
+            <a href="{% url 'lista_produccion' %}" class="flex-1 text-center py-3 text-gray-500 font-bold hover:bg-stone-50 rounded-xl transition">Atrás</a>
+            <button type="submit" class="flex-1 bg-[#3D5229] text-white py-3 rounded-xl font-bold hover:brightness-110 shadow-md">GUARDAR REGISTRO</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

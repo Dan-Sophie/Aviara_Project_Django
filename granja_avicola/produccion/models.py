@@ -35,7 +35,7 @@ class Produccion(models.Model):
     lote = models.ForeignKey(Lote, on_delete=models.CASCADE, related_name='registro_produccion')
     cantidad_recolectada = models.PositiveIntegerField()
     mortalidad_del_dia = models.PositiveIntegerField(default=0)
-    observaciones = models.TextField()
+    observaciones = models.TextField(blank=True, null=True)
 
     def __str_(self):
         return f"Registro {self.id} - Lote {self.lote.codigo_lote}"

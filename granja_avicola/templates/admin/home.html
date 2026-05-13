@@ -1,53 +1,105 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="d-flex" style="min-height: 100vh; background-color: #f4f7f6;">
+<div class="d-flex" style="min-height: 100vh; background-color: #f8faf9;">
     
-    <nav class="sidebar shadow-sm" style="width: 280px; background-color: #ffffff; min-height: 100vh;">
+    <nav class="sidebar shadow-sm" style="width: 340px; background-color: #ffffff; min-height: 100vh; position: sticky; top: 0; border-right: 1px solid #edf2f0;">
         <div class="p-4 text-center border-bottom">
-            <h4 class="fw-bold" style="color: #630E20; letter-spacing: -1px;">Aviara Panel</h4>
-            <span class="badge rounded-pill" style="background-color: #630E20; font-size: 0.7rem;">ADMINISTRADOR</span>
+            <a href="{% url 'home' %}" style="text-decoration: none; display: block;">
+                <h4 class="fw-bold" style="color: #630E20; letter-spacing: -1px; margin-bottom: 0; font-size: 1.8rem;">Aviara Panel</h4>
+            </a>
+            <span class="badge rounded-pill mt-2 px-3 py-1" style="background-color: #630E20; font-size: 0.7rem; letter-spacing: 0.5px; font-weight: 500;">ADMINISTRADOR</span>
         </div>
         
-        <div class="list-group list-group-flush p-3">
-            <a href="{% url 'lista_usuarios' %}" class="list-group-item list-group-item-action border-0 py-3 mb-1" style="border-radius: 12px; font-weight: 600; color: #444;">
-                <span class="me-2"></span> Usuarios
+        <div class="list-group list-group-flush p-3 mt-2">
+            <a href="{% url 'lista_usuarios' %}" class="list-group-item list-group-item-action border-0 py-3 mb-1 nav-item-custom">
+                <span class="nav-icon">👥</span> Usuarios
             </a>
-            <a href="#" class="list-group-item list-group-item-action border-0 py-3 mb-1" style="border-radius: 12px; font-weight: 600; color: #444;">
-                <span class="me-2">📖</span> Catálogo
+            <a href="#" class="list-group-item list-group-item-action border-0 py-3 mb-1 nav-item-custom">
+                <span class="nav-icon">📖</span> Catálogo
             </a>
-            <a href="#" class="list-group-item list-group-item-action border-0 py-3 mb-1" style="border-radius: 12px; font-weight: 600; color: #444;">
-                <span class="me-2">🥚</span> Producción
+            <a href="{% url 'lista' %}" class="list-group-item list-group-item-action border-0 py-3 mb-1 nav-item-custom">
+                <span class="nav-icon">🥚</span> Producción
             </a>
-            <a href="#" class="list-group-item list-group-item-action border-0 py-3 mb-1" style="border-radius: 12px; font-weight: 600; color: #444;">
-                <span class="me-2">📉</span> Merma
+            <a href="{% url 'lista_lotes' %}" class="list-group-item list-group-item-action border-0 py-3 mb-1 nav-item-custom" style="background-color: #fdf2f4; color: #630E20 !important;">
+                <span class="nav-icon">📦</span> Lotes
             </a>
-            <a href="#" class="list-group-item list-group-item-action border-0 py-3 mb-1" style="border-radius: 12px; font-weight: 600; color: #444;">
-                <span class="me-2">📦</span> Inventario
+            <a href="#" class="list-group-item list-group-item-action border-0 py-3 mb-1 nav-item-custom">
+                <span class="nav-icon">📉</span> Merma
             </a>
-            <a href="#" class="list-group-item list-group-item-action border-0 py-3 mb-1" style="border-radius: 12px; font-weight: 600; color: #444;">
-                <span class="me-2">🛒</span> Pedidos
+            <a href="#" class="list-group-item list-group-item-action border-0 py-3 mb-1 nav-item-custom">
+                <span class="nav-icon">🏗️</span> Inventario
             </a>
-            <a href="#" class="list-group-item list-group-item-action border-0 py-3 mb-1" style="border-radius: 12px; font-weight: 600; color: #444;">
-                <span class="me-2">🚚</span> Distribuidor
+            <a href="{% url 'lista_pedidos' %}" class="list-group-item list-group-item-action border-0 py-3 mb-1 nav-item-custom">
+                <span class="nav-icon"></span> Pedidos
+            </a>
+            <a href="#" class="list-group-item list-group-item-action border-0 py-3 mb-1 nav-item-custom">
+                <span class="nav-icon">🚚</span> Distribuidor
             </a>
         </div>
     </nav>
 
-    <main class="flex-grow-1 p-5">
-        <header class="mb-5">
-            <h1 class="fw-bold" style="color: #630E20; font-size: 3.5rem; letter-spacing: -2.5px; line-height: 0.9; margin-bottom: 5px;">
+    <main class="flex-grow-1 p-4 p-md-5">
+        <header class="mb-4">
+            <h1 class="fw-bold text-uppercase" style="color: #630E20; font-size: 3rem; letter-spacing: -2px; line-height: 1; margin-bottom: 10px;">
                 Panel de Control
             </h1>
             <p class="text-muted" style="font-size: 1.1rem; font-weight: 400; opacity: 0.8;">
-                Gestiona todos los módulos de la granja Aviara.
+                Gestión integral de los módulos operativos de la granja Aviara.
             </p>
         </header>
 
-        <div class="alert alert-light border-0 shadow-sm p-4" style="border-radius: 20px;">
-            <h4 class="fw-bold">Bienvenido, {{ user.username }}</h4>
-            <p class="mb-0">Desde aquí puedes supervisar la producción y ventas.</p>
+        <div class="card border-0 shadow-sm" style="border-radius: 20px; background-color: white;">
+            <div class="card-body p-4 p-md-5">
+                <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0 me-4">
+                        <div class="d-flex align-items-center justify-content-center" style="font-size: 2.5rem; background: #fdf2f4; width: 80px; height: 80px; border-radius: 18px;">
+                            🌾
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="fw-bold mb-1" style="color: #333; font-size: 1.8rem;">Bienvenido, {{ user.username }}</h3>
+                        <p class="text-muted mb-0" style="font-size: 1rem;">El sistema está listo para supervisar la producción y ventas de hoy.</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </main>
 </div>
+
+<style>
+    /* Estilos para los items de navegación proporcionales */
+    .nav-item-custom {
+        border-radius: 12px !important; 
+        font-weight: 600 !important; 
+        color: #555 !important; 
+        font-size: 1rem !important;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+    }
+
+    .nav-icon {
+        margin-right: 15px;
+        font-size: 1.2rem;
+        width: 25px;
+        text-align: center;
+    }
+
+    .nav-item-custom:hover {
+        background-color: #f8f9fa !important;
+        transform: translateX(5px);
+        color: #630E20 !important;
+    }
+
+    /* Animación suave para la entrada del panel */
+    main {
+        animation: fadeIn 0.5s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>
 {% endblock %}

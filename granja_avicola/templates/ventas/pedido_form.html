@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="p-4" style="background-color: #f4f7f6; min-height: 100vh;">
+    <form method="POST">
+        {% csrf_token %}
+        
+        <header class="mb-4 d-flex justify-content-between align-items-center">
+            <div>
+                <h1 class="fw-bold" style="color: #F57C00; font-size: 2.5rem; letter-spacing: -1px;">
+                    {% if pedido %} Editar Pedido #{{ pedido.id }} {% else %} Nuevo Pedido {% endif %}
+                </h1>
+                <p class="text-muted fw-bold small uppercase">Aviara | Módulo de Ventas</p>
+            </div>
+            <div class="d-flex gap-2">
+                <a href="{% url 'lista_pedidos' %}" class="btn btn-light px-4 fw-bold" style="border-radius: 12px;">Cancelar</a>
+                <button type="submit" class="btn text-white px-4 fw-bold shadow-sm" style="background-color: #F57C00; border-radius: 12px; border: none;">
+                    <i class="bi bi-check-lg me-2"></i> Guardar Pedido
+                </button>
+            </div>
+        </header>
+
+        <div class="row g-4">
+            <div class="col-lg-4">
+                <div class="card border-0 shadow-sm p-4" style="border-radius: 20px;">
+                    <h5 class="fw-bold mb-4" style="color: #3D5229;">Encabezado</h5>
+                    <div class="mb-3">
+                        <label class="small fw-bold text-muted uppercase mb-1 d-block">Cliente</label>
+                        {{ form.usuario }}
+                    </div>
+                    <div class="mb-3">
+                        <label class="small fw-bold text-muted uppercase mb-1 d-block">Estado de Pedido</label>
+                        {{ form.estado_pedido }}
+                    </div>
+                    <div class="mb-3">
+                        <label class="small fw-bold text-muted uppercase mb-1 d-block">Dirección de Entrega</label>
+                        {{ form.direccion_entrega }}
+                    </div>
+                    <div class="mb-3">
+                        <label class="small fw-bold text-muted uppercase mb-1 d-block">Asignar Distribuidor</label>
+                        {{ form.distribuidor }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-8">
+                <div class="card border-0 shadow-sm p-4" style="border-radius: 20px;">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h5 class="fw-bold m-0" style="color: #3D5229;">Productos en Pedido</h5>
+                        <span class="badge" style="background-color: #F5F5DC; color: #F57C00;">Items: {{ formset.total_form_count }}</span>
+                    </div>
+
+                    {{ formset.management_form }}
+                    <div id="formset-container">
+                        {% for f in formset %}
+                        <div class="row g-2 mb-3 align-items-end p-3 rounded-4" style="background-color: #fcfcfc; border: 1px solid #f1f1f1;">
+                            {{ f.id }}
+                            <div class="col-md-5">
+                                <label class="text-muted small fw-bold">Producto</label>
+                                {{ f.producto }}
+                            </div>
+                            <div class="col-md-2">
+                                <label class="text-muted small fw-bold">Cantidad</label>
+                                {{ f.cantidad }}
+                            </div>
+                            <div class="col-md-3">
+                                <label class="text-muted small fw-bold">Precio Unit.</label>
+                                {{ f.precio_unitario_venta }}
+                            </div>
+                            <div class="col-md-2 text-center">
+                                {% if formset.can_delete %}
+                                    <label class="text-danger small fw-bold d-block">¿Quitar?</label>
+                                    {{ f.DELETE }}
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<style>
+    input, select { 
+        width: 100%; 
+        padding: 10px; 
+        border: 1px solid #eee; 
+        border-radius: 12px !important; 
+        background-color: #fff;
+    }
+    input:focus, select:focus { border-color: #F57C00; outline: none; box-shadow: 0 0 0 3px rgba(245, 124, 0, 0.1); }
+</style>
+{% endblock %}

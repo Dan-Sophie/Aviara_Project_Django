@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="max-w-2xl mx-auto bg-white rounded-3xl shadow-xl overflow-hidden">
+    <div class="bg-[#3D5229] p-8 text-white">
+        <h2 class="text-3xl font-bold italic">{{ titulo }}</h2>
+        <p class="text-xs opacity-70">Defina los parámetros de calidad y vencimiento del nuevo lote.</p>
+    </div>
+    <form method="POST" class="p-8 space-y-4">
+        {% csrf_token %}
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {% for field in form %}
+            <div class="flex flex-col gap-1">
+                <label class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{{ field.label }}</label>
+                {{ field }}
+                {% if field.errors %}<p class="text-red-500 text-[10px]">{{ field.errors.0 }}</p>{% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        <div class="flex gap-4 pt-8">
+            <a href="{% url 'lista_lotes' %}" class="flex-1 text-center py-4 text-gray-400 font-bold hover:text-gray-600 uppercase text-xs tracking-widest">Cancelar</a>
+            <button type="submit" class="flex-1 bg-[#3D5229] text-white py-4 rounded-2xl font-bold hover:brightness-110 shadow-lg transition-all">
+                CONFIRMAR LOTE
+            </button>
+        </div>
+    </form>
+</div>
+
+<style>
+    input, select, textarea {
+        padding: 0.8rem;
+        background-color: #F9FAFB;
+        border: 1px solid #F3F4F6;
+        border-radius: 1rem;
+        outline: none;
+    }
+    input:focus, select:focus { border-color: #3D5229; box-shadow: 0 0 0 2px rgba(61, 82, 41, 0.1); }
+</style>
+{% endblock %}

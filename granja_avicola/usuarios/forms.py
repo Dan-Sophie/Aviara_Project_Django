@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
-from .models import TipoDocumento
+from .models import TipoDocumento, Rol
 
 Usuario = get_user_model()
 
@@ -71,11 +71,50 @@ class RegistroForm(UserCreationForm):
         return user
 
 class UsuarioForm(forms.ModelForm):
+    rol = forms.ModelChoiceField(
+        queryset=Rol.objects.all(),
+        required=True,
+        label="Rol/Cargo",
+        empty_label="Seleccione un cargo",
+        widget=forms.Select(attrs={'class': 'form-select', 'style': 'border-radius:12px;'})
+    )
+
     class Meta:
         model = Usuario
-        fields = ['username', 'email', 'first_name', 'last_name', 'is_staff', 'is_active']
-    
+        fields = [
+            'tipo_documento', 'documento', 'username', 'first_name', 'last_name',
+            'email', 'telefono', 'rol', 'password', 'is_staff', 'is_active'
+        ]
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        for field in self.fields:
-            self.fields[field].widget.attrs.update({'class': 'form-control'})
+        # Si estamos editando, forzamos a que el selector muestre el rol actual
+        if self.instance and self.instance.pk:
+            if self.instance.rol:
+                self.fields['rol'].initial = self.instance.rol
+            self.fields['password'].required = False
+
+        for field_name, field in self.fields.items():
+            if not isinstance(field.widget, forms.CheckboxInput):
+                field.widget.attrs.update({
+                    'class': 'form-control' if field_name != 'rol' else 'form-select',
+                    'style': 'border-radius:12px; padding:10px; border: 1px solid #e0e0e0'
+                })
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        print(f"VALOR LLEGANDO DEL FORMULARIO: {self.cleaned_data.get('rol')}")
+        
+        # Guardado manual del Rol (Para que no se resetee a Cliente)
+        user.rol = self.cleaned_data.get('rol')
+        
+        # Guardado manual del estado (Para que no salga Inactivo)
+        user.is_active = self.cleaned_data.get('is_active')
+        
+        password = self.cleaned_data.get("password")
+        if password:
+            user.set_password(password)
+
+        if commit:
+            user.save()
+        return user

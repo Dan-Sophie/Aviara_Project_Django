@@ -19,7 +19,7 @@ class Usuario(AbstractUser):
     tipo_documento = models.ForeignKey(TipoDocumento, on_delete=models.PROTECT, null=True)
     documento = models.CharField(max_length=20, unique=True)
     telefono = models.CharField(max_length=20, blank=True, null=True)
-    rol = models.ForeignKey(Rol, on_delete=models.PROTECT, null=True)
+    rol = models.ForeignKey(Rol, on_delete=models.SET_NULL, null=True)
     estado = models.CharField(max_length=20, default='Activo')
 
     def __str__(self):

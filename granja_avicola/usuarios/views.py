@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib import messages
 from django.conf import settings
 from django.core.mail import send_mail
@@ -7,6 +7,8 @@ from .forms import RegistroForm, UsuarioForm
 from django.contrib.auth import get_user_model
 from import_export.formats.base_formats import XLSX
 from .admin import UsuarioResource
+from .models import Usuario
+
 
 Usuario = get_user_model()
 
@@ -54,6 +56,7 @@ def admin_dashboard(request):
     return render(request, 'admin/home.html')
 
 @login_required
+@permission_required('auth.view_user', login_url='dashboard')
 def lista_usuarios(request):
     usuarios = Usuario.objects.all().order_by('-date_joined')
     return render(request, 'usuarios/lista.html', {'usuarios': usuarios})
@@ -77,13 +80,38 @@ def carga_masiva_usuarios(request):
             messages.error(request, "Hubo un error en el formato del archivo.")
         return redirect('lista_usuarios')
 
+@login_required
+@permission_required('auth.view_user', login_url='lista_usuarios')
 def editar_usuario(request, pk):
     usuario = get_object_or_404(Usuario, pk=pk)
     if request.method == 'POST':
         form = UsuarioForm(request.POST, instance=usuario)
         if form.is_valid():
             form.save()
+            messages.success(request, f'Perfil de {usuario.username} actualizado.')
             return redirect('lista_usuarios')
+        else:
+            print(form.errors)
     else:
         form = UsuarioForm(instance=usuario)
-    return render(request, 'usuarios/editar_usuarios.html', {'form': form, 'usuario': usuario})
+    return render(request, 'usuarios/editar_usuario.html', {'form': form, 'usuario': usuario})
+
+def eliminar_usuario(request, pk):
+    usuario = get_object_or_404(Usuario, pk=pk)
+    nombre = usuario.username
+    usuario.delete()
+    messages.warning(request, f'El usuario {nombre} ha sido eliminado.')
+    return redirect('lista_usuarios')
+
+def crear_usuario(request):
+    if request.method == 'POST':
+        form = UsuarioForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'El usuario ha sido registrado en el sistema Aviara')
+            return redirect('lista_usuarios')
+        else:
+            messages.error(request, 'Por favor corrige los errores en el formulario.')
+    else:
+        form = UsuarioForm()
+    return render(request, 'usuarios/crear_usuario.html', {'form': form})

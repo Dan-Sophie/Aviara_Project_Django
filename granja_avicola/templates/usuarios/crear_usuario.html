@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    /* Contenedor principal que simula el input */
+    .password-field-container {
+        display: flex !important;
+        align-items: center !important;
+        background-color: white !important;
+        border: 1px solid #dee2e6 !important;
+        border-radius: 12px !important;
+        padding-right: 10px !important;
+        height: 50px !important;
+        overflow: hidden !important;
+        transition: all 0.2s;
+    }
+
+    .password-field-container:focus-within {
+        border-color: #630E20 !important;
+        box-shadow: 0 0 0 0.2rem rgba(99, 14, 32, 0.1) !important;
+    }
+
+    /* Forzamos el input de Django para que no tenga bordes propios */
+    .password-field-container input {
+        border: none !important;
+        box-shadow: none !important;
+        height: 100% !important;
+        width: 100% !important;
+        padding-left: 15px !important;
+        outline: none !important;
+        background: transparent !important;
+    }
+
+    /* Estilo del botón del ojo para que el icono sea visible */
+    #togglePassword {
+        background: none !important;
+        border: none !important;
+        cursor: pointer !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        padding: 5px !important;
+        transition: transform 0.2s;
+    }
+
+    #togglePassword:hover {
+        transform: scale(1.1);
+    }
+
+    /* Forzamos el tamaño y color del icono de Bootstrap */
+    #togglePassword i {
+        color: #630E20 !important; /* Color vino de tu marca */
+        font-size: 1.4rem !important; /* Tamaño más grande para que se vea */
+        display: inline-block !important;
+    }
+</style>
+
+<div class="p-5" style="background-color: #f4f7f6; min-height: 100vh;">
+    <div class="container">
+        <header class="mb-5 d-flex justify-content-between align-items-center">
+            <div>
+                <h1 class="fw-bold" style="color: #630E20; font-size: 4.2rem; letter-spacing: -3px; line-height: 0.8; margin-bottom: 5px;">Nuevo Usuario</h1>
+                <p class="text-muted fw-bold" style="font-size: 0.9rem; letter-spacing: 5px; text-transform: uppercase; opacity: 0.5;">Personal Aviara</p>
+            </div>
+            <a href="{% url 'lista_usuarios' %}" class="btn btn-white px-3 shadow-sm d-flex align-items-center" style="border-radius: 12px; border: 1px solid #e0e0e0; background: white; color: #630E20; font-weight: 600; height: 45px;">
+                <i class="bi bi-arrow-left-circle-fill me-2"></i> Volver
+            </a>
+        </header>
+
+        <div class="row align-items-stretch">
+            <div class="col-lg-8">
+                <div class="card border-0 shadow-lg h-100" style="border-radius: 30px;">
+                    <div class="card-body p-5">
+                        <form method="POST">
+                            {% csrf_token %}
+                            <div class="row g-4">
+                                {% for field in form %}
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold small text-uppercase" style="color: #630E20; opacity: 0.8;">
+                                            {{ field.label }}
+                                        </label>
+
+                                        {% if field.name == 'password' %}
+                                            <div class="password-field-container">
+                                                {{ field }}
+                                                <button type="button" id="togglePassword">
+                                                    <i class="bi bi-eye-fill" id="eyeIcon"></i>
+                                                </button>
+                                            </div>
+                                        {% else %}
+                                            {{ field }}
+                                        {% endif %}
+                                        
+                                        {% if field.errors %}
+                                            {% for error in field.errors %}
+                                                <div class="text-danger fw-bold" style="font-size: 0.8rem;">
+                                                    <i class="bi bi-exclamation-triangle"></i> {{ error }}
+                                                </div>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <button type="submit" class="btn text-white px-5 py-3 mt-5 shadow-sm" style="background-color: #630E20; border-radius: 15px; font-weight: 600;">Guardar Usuario</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4">
+                <div class="card border-0 shadow-sm text-white text-center p-5 d-flex flex-column justify-content-center h-100" 
+                     style="background: linear-gradient(135deg, #F39C12 0%, #630E20 100%); border-radius: 30px;">
+                    <div>
+                        <i class="bi bi-shield-lock-fill" style="font-size: 4rem;"></i>
+                        <h4 class="fw-bold mt-3">Asignación Única</h4>
+                        <div class="py-2"><hr class="opacity-25 my-4"></div>
+                        <p class="small px-2">Cada usuario en el sistema debe tener <strong>un solo rol</strong> asignado para mantener la integridad de los permisos en la granja.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const toggleBtn = document.getElementById('togglePassword');
+        const passInput = document.querySelector('input[name="password"]');
+        const icon = document.getElementById('eyeIcon');
+
+        if (toggleBtn && passInput) {
+            toggleBtn.addEventListener('click', function() {
+                const isPassword = passInput.type === 'password';
+                passInput.type = isPassword ? 'text' : 'password';
+                
+                // Cambiar el icono entre ojo abierto y ojo con raya
+                if (isPassword) {
+                    icon.classList.replace('bi-eye-fill', 'bi-eye-slash-fill');
+                } else {
+                    icon.classList.replace('bi-eye-slash-fill', 'bi-eye-fill');
+                }
+            });
+        }
+    });
+</script>
+{% endblock %}
